@@ -11,6 +11,8 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
+
 import java.util.concurrent.TimeUnit;
 @TestMethodOrder(OrderAnnotation.class)
 
@@ -35,40 +37,59 @@ public class TestCases {
     public void incorrectLogin(){
         driver.get("https://robotsparebinindustries.com/#/");
         loginPage.loginUser("Petq", "Kirova");
+
+        String buttonLogIn = driver.findElement(By.className("btn-primary")).getText();
+        Assert.assertEquals("LOG IN",buttonLogIn);
     }
     @Test
     @Order(2)
     public void correctLogin(){
         driver.get("https://robotsparebinindustries.com/#/");
         loginPage.loginUser("maria", "thoushallnotpass");
+
         driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+
+        String containerWithLoginUser = driver.findElement(By.className("btn-primary")).getText();
+        Assert.assertNotEquals("LOGOUT", containerWithLoginUser);
     }
     @Test
     @Order(3)
     public void positiveSalesWithHidePerformance(){
         WebDriverWait wait = new WebDriverWait(driver,5);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("username")));
+
+        String logOut = driver.findElement(By.id("logout")).getText();
+        Assert.assertEquals("Log out", logOut);
+
         activeSalesPage.addSales("Mariq", "Marinova", "10000","20000");
         activeSalesPage.showPerformance();
     }
     @Test
     @Order(4)
     public void positiveSalesWithDeleteAllSales(){
+        boolean isElementVisible = driver.findElement((By.id("logout"))).isDisplayed();
+
         activeSalesPage.addSales("Mariq", "Marinova", "90000", "97000");
         activeSalesPage.deleteSales();
     }
     @Test
     @Order(5)
     public void negativeSalesWithShowPerformance(){
+        boolean containerUserAndLogOut = driver.findElement(By.className("btn-primary")).isDisplayed();
+
         activeSalesPage.addSales("Mariq", "Marinova","15000", "1000");
         activeSalesPage.showPerformance();
     }
     @Test
     @Order(6)
     public void negativeSalesWithDeleteAllSales(){
+        String buttonSubmit = driver.findElement(By.className("btn-primary")).getText();
+        Assert.assertEquals("SUBMIT",buttonSubmit);
+
         activeSalesPage.addSales("Petq", "Kirova","75000", "10000");
         activeSalesPage.deleteSales();
     }
+
     @Test
     @Order(7)
     public void buildRobotRollAThor(){
