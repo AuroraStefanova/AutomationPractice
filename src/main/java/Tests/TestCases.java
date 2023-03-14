@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class TestCases {
     private static String typeOfBrowser = "Chrome";
     private String baseUrl = "https://robotsparebinindustries.com/#/";
-    String isTry;
+    String message;
     static WebDriver driver;
     static LoginPage loginPage;
     static RobotOrder robotOrderPage;
@@ -67,8 +67,8 @@ public class TestCases {
         activeSalesPage.addSales("Mariq", "Marinova", "10000","20000");
         activeSalesPage.showPerformance();
 
-        isTry = driver.findElement(By.xpath("//span[contains(text(),'A positive result. Well done!')]")).getText();
-        Assert.assertEquals("A positive result. Well done!", isTry);
+        message = driver.findElement(By.xpath("//span[contains(text(),'A positive result. Well done!')]")).getText();
+        Assert.assertEquals("A positive result. Well done!", message);
 
         activeSalesPage.deleteSales();
     }
@@ -80,8 +80,8 @@ public class TestCases {
         activeSalesPage.addSales("Mariq", "Marinova", "90000", "97000");
         activeSalesPage.showPerformance();
 
-        isTry = driver.findElement(By.xpath("//span[contains(text(),'A positive result. Well done!')]")).getText();
-        Assert.assertNotEquals("The boss wants to see you...", isTry);
+        message = driver.findElement(By.xpath("//span[contains(text(),'A positive result. Well done!')]")).getText();
+        Assert.assertNotEquals("The boss wants to see you...", message);
 
         activeSalesPage.deleteSales();
     }
@@ -93,8 +93,8 @@ public class TestCases {
         activeSalesPage.addSales("Mariq", "Marinova","15000", "10000");
         activeSalesPage.showPerformance();
 
-        isTry = driver.findElement(By.xpath("//*[contains(text(),'Well. It was a nice attempt. I guess?')]")).getText();
-        Assert.assertEquals("Well. It was a nice attempt. I guess?", isTry);
+        message = driver.findElement(By.xpath("//*[contains(text(),'Well. It was a nice attempt. I guess?')]")).getText();
+        Assert.assertEquals("Well. It was a nice attempt. I guess?", message);
 
         activeSalesPage.deleteSales();
     }
@@ -107,8 +107,8 @@ public class TestCases {
         activeSalesPage.addSales("Petq", "Kirova","75000", "10000");
         activeSalesPage.showPerformance();
 
-        isTry = driver.findElement(By.xpath("//span[contains(text(),'The boss wants to see you...')]")).getText();
-        Assert.assertNotSame("Well. It was a nice attempt. I guess?", isTry);
+        message = driver.findElement(By.xpath("//span[contains(text(),'The boss wants to see you...')]")).getText();
+        Assert.assertNotSame("Well. It was a nice attempt. I guess?", message);
 
         activeSalesPage.deleteSales();
     }
