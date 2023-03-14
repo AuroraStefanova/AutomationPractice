@@ -17,13 +17,16 @@ import java.util.concurrent.TimeUnit;
 @TestMethodOrder(OrderAnnotation.class)
 
 public class TestCases {
+    private static String typeOfBrowser = "Chrome";
+    private String baseUrl = "https://robotsparebinindustries.com/#/";
+    String isTry;
     static WebDriver driver;
     static LoginPage loginPage;
     static RobotOrder robotOrderPage;
     static ActiveSales activeSalesPage;
     @BeforeAll
     public static void beforeClass(){
-        driver = BrowserFactory.getBrowser("Chrome");
+        driver = BrowserFactory.getBrowser(typeOfBrowser);
         loginPage = new LoginPage(driver);
         robotOrderPage = new RobotOrder(driver);
         activeSalesPage = new ActiveSales(driver);
@@ -35,7 +38,7 @@ public class TestCases {
     @Test
     @Order(1)
     public void incorrectLogin(){
-        driver.get("https://robotsparebinindustries.com/#/");
+        driver.get(baseUrl);// линка извън в променлива
         loginPage.loginUser("Petq", "Kirova");
 
         String buttonLogIn = driver.findElement(By.className("btn-primary")).getText();
@@ -44,13 +47,13 @@ public class TestCases {
     @Test
     @Order(2)
     public void correctLogin(){
-        driver.get("https://robotsparebinindustries.com/#/");
+        driver.get(baseUrl);// в променлива
         loginPage.loginUser("maria", "thoushallnotpass");
 
         driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
 
-        String containerWithLoginUser = driver.findElement(By.className("btn-primary")).getText();
-        Assert.assertNotEquals("LOGOUT", containerWithLoginUser);
+        String containerWithLoginUser = driver.findElement(By.xpath("//*[contains(text(),'maria')]")).getText();//(By.className(".username")).getText();
+        Assert.assertNotEquals("maria", containerWithLoginUser); // да проверява по мария а не логаут //span[contains(text(),'maria')]
     }
     @Test
     @Order(3)
@@ -63,6 +66,11 @@ public class TestCases {
 
         activeSalesPage.addSales("Mariq", "Marinova", "10000","20000");
         activeSalesPage.showPerformance();
+
+        isTry = driver.findElement(By.xpath("//span[contains(text(),'A positive result. Well done!')]")).getText();
+        Assert.assertEquals("A positive result. Well done!", isTry);
+
+        activeSalesPage.deleteSales();
     }
     @Test
     @Order(4)
@@ -70,6 +78,11 @@ public class TestCases {
         boolean isElementVisible = driver.findElement((By.id("logout"))).isDisplayed();
 
         activeSalesPage.addSales("Mariq", "Marinova", "90000", "97000");
+        activeSalesPage.showPerformance();
+
+        isTry = driver.findElement(By.xpath("//span[contains(text(),'A positive result. Well done!')]")).getText();
+        Assert.assertNotEquals("The boss wants to see you...", isTry);
+
         activeSalesPage.deleteSales();
     }
     @Test
@@ -77,8 +90,12 @@ public class TestCases {
     public void negativeSalesWithShowPerformance(){
         boolean containerUserAndLogOut = driver.findElement(By.className("btn-primary")).isDisplayed();
 
-        activeSalesPage.addSales("Mariq", "Marinova","15000", "1000");
+        activeSalesPage.addSales("Mariq", "Marinova","15000", "10000");
         activeSalesPage.showPerformance();
+
+        isTry = driver.findElement(By.xpath("//*[contains(text(),'Well. It was a nice attempt. I guess?')]")).getText();
+        Assert.assertEquals("Well. It was a nice attempt. I guess?", isTry);
+        activeSalesPage.deleteSales();
     }
     @Test
     @Order(6)
@@ -87,7 +104,12 @@ public class TestCases {
         Assert.assertEquals("SUBMIT",buttonSubmit);
 
         activeSalesPage.addSales("Petq", "Kirova","75000", "10000");
-        activeSalesPage.deleteSales();
+        activeSalesPage.showPerformance();
+
+        isTry = driver.findElement(By.xpath("//span[contains(text(),'The boss wants to see you...')]")).getText();
+        Assert.assertNotSame("Well. It was a nice attempt. I guess?", isTry);
+        activeSalesPage.deleteSales();// асърти за проверка на съобщение
+
     }
 
     @Test
