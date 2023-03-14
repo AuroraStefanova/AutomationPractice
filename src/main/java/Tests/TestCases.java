@@ -38,7 +38,7 @@ public class TestCases {
     @Test
     @Order(1)
     public void incorrectLogin(){
-        driver.get(baseUrl);// линка извън в променлива
+        driver.get(baseUrl);
         loginPage.loginUser("Petq", "Kirova");
 
         String buttonLogIn = driver.findElement(By.className("btn-primary")).getText();
@@ -47,13 +47,13 @@ public class TestCases {
     @Test
     @Order(2)
     public void correctLogin(){
-        driver.get(baseUrl);// в променлива
+        driver.get(baseUrl);
         loginPage.loginUser("maria", "thoushallnotpass");
 
         driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
 
-        String containerWithLoginUser = driver.findElement(By.xpath("//*[contains(text(),'maria')]")).getText();//(By.className(".username")).getText();
-        Assert.assertNotEquals("maria", containerWithLoginUser); // да проверява по мария а не логаут //span[contains(text(),'maria')]
+        String containerWithLoginUser = driver.findElement(By.xpath("//*[contains(text(),'maria')]")).getText();
+        Assert.assertNotEquals("maria", containerWithLoginUser);
     }
     @Test
     @Order(3)
@@ -95,6 +95,7 @@ public class TestCases {
 
         isTry = driver.findElement(By.xpath("//*[contains(text(),'Well. It was a nice attempt. I guess?')]")).getText();
         Assert.assertEquals("Well. It was a nice attempt. I guess?", isTry);
+
         activeSalesPage.deleteSales();
     }
     @Test
@@ -108,10 +109,9 @@ public class TestCases {
 
         isTry = driver.findElement(By.xpath("//span[contains(text(),'The boss wants to see you...')]")).getText();
         Assert.assertNotSame("Well. It was a nice attempt. I guess?", isTry);
-        activeSalesPage.deleteSales();// асърти за проверка на съобщение
 
+        activeSalesPage.deleteSales();
     }
-
     @Test
     @Order(7)
     public void buildRobotRollAThor(){
